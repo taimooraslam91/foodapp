@@ -1,25 +1,12 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-
-interface Product {
-  id: number;
-  name: string;
-}
-
-interface CartItem {
-  product: Product;
-  quantity: number;
-}
-
-interface CartState {
-  cartItems: CartItem[];
-}
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { CartItem, CartState } from '../interfaces';
 
 const initialState: CartState = {
   cartItems: [],
 };
 
 export const cartSlice = createSlice({
-  name: "cart",
+  name: 'cart',
   initialState,
   reducers: {
     reset: (state) => {
