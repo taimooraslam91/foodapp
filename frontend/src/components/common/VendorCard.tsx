@@ -1,4 +1,4 @@
-import { Restaurant } from "../../types/data";
+import { Restaurant } from "../../interfaces";
 
 interface CarProps {
   resturant: Restaurant;

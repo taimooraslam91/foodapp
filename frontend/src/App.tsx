@@ -3,6 +3,8 @@ import { Route, Routes } from "react-router-dom";
 
 import Home from "./pages/Home";
 import RestaurantDetail from "./pages/RestaurantDetail";
+import Checkout from "./pages/Checkout";
+import Login from "./pages/login";
 
 import "./App.scss";
 
@@ -12,6 +14,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/restaurant/:id" element={<RestaurantDetail />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </Suspense>
   );

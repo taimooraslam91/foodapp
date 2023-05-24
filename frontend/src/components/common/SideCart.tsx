@@ -1,42 +1,15 @@
+import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-
-const products = [
-  {
-    id: 1,
-    name: "Xtreme Duo Box",
-    href: "#",
-    resturant: "KFC",
-    price: "Rs 1390",
-    quantity: 1,
-    imageSrc: "https://images.kfcpakistan.com/image/1670410761440-image.jpg",
-    imageAlt:
-      "The irresistible combo of 2 signature Zingers + 2 pcs Hot & Crispy Chicken + 1 large fries + 2 drinks",
-  },
-  {
-    id: 2,
-    name: "Xtreme Duo Box",
-    href: "#",
-    resturant: "KFC",
-    price: "Rs 1390",
-    quantity: 1,
-    imageSrc: "https://images.kfcpakistan.com/image/1670410761440-image.jpg",
-    imageAlt:
-      "The irresistible combo of 2 signature Zingers + 2 pcs Hot & Crispy Chicken + 1 large fries + 2 drinks",
-  },
-  {
-    id: 3,
-    name: "Xtreme Duo Box",
-    href: "#",
-    resturant: "KFC",
-    price: "Rs 1390",
-    quantity: 1,
-    imageSrc: "https://images.kfcpakistan.com/image/1670410761440-image.jpg",
-    imageAlt:
-      "The irresistible combo of 2 signature Zingers + 2 pcs Hot & Crispy Chicken + 1 large fries + 2 drinks",
-  },
-];
+import {
+  removeFromCart,
+  storeCartItems,
+  increaseQuantity,
+  decreaseQuantity,
+} from "../../reducers/cartSlice";
 
 type SetOpen = (value: boolean) => void;
 interface CartProps {
@@ -45,9 +18,40 @@ interface CartProps {
 }
 
 export default function SideCart({ open, setOpen }: CartProps) {
+  const dispatch = useDispatch();
+
+  const { cartItems } = useSelector((state: any) => state.cart);
+  const subtotal = cartItems.reduce((total: number, item: any) => {
+    const itemSubtotal = item.quantity * item.product.price;
+    return total + itemSubtotal;
+  }, 0);
+
+  const handleRemoveItem = (item: any) => {
+    dispatch(removeFromCart(item.product.id));
+    dispatch(storeCartItems());
+  };
+
+  const increaseItem = (item: any) => {
+    dispatch(increaseQuantity(item?.product.id));
+    dispatch(storeCartItems());
+  };
+
+  const decreaseItem = (item: any) => {
+    if (item.quantity > 1) {
+      dispatch(decreaseQuantity(item?.product.id));
+      dispatch(storeCartItems());
+    } else {
+      handleRemoveItem(item);
+    }
+  };
+
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={() => setOpen(false)}>
+      <Dialog
+        as="div"
+        className="relative z-[100]"
+        onClose={() => setOpen(false)}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-500"
@@ -97,12 +101,12 @@ export default function SideCart({ open, setOpen }: CartProps) {
                             role="list"
                             className="-my-6 divide-y divide-gray-200"
                           >
-                            {products.map((product) => (
-                              <li key={product.id} className="flex py-6">
+                            {cartItems?.map((item: any, idx: number) => (
+                              <li key={idx} className="flex py-6">
                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                   <img
-                                    src={product.imageSrc}
-                                    alt={product.imageAlt}
+                                    src={item?.product.image}
+                                    alt={item?.product.description}
                                     className="h-full w-full object-cover object-center"
                                   />
                                 </div>
@@ -111,25 +115,39 @@ export default function SideCart({ open, setOpen }: CartProps) {
                                   <div>
                                     <div className="flex justify-between text-base font-medium text-gray-900">
                                       <h3>
-                                        <a href={product.href}>
-                                          {product.name}
-                                        </a>
+                                        <p>{item?.product.name}</p>
                                       </h3>
-                                      <p className="ml-4">{product.price}</p>
+                                      <p className="ml-4">
+                                        Rs.{" "}
+                                        {item?.product.price * item?.quantity}
+                                      </p>
                                     </div>
-                                    <p className="mt-1 text-sm text-gray-500">
-                                      {product.resturant}
+                                    <p className="mt-1 text-sm text-gray-500 truncate">
+                                      {item?.product.restaurant}
                                     </p>
                                   </div>
                                   <div className="flex flex-1 items-end justify-between text-sm">
-                                    <p className="text-gray-500">
-                                      Qty {product.quantity}
-                                    </p>
+                                    <div className="flex items-center gap-2 my-1">
+                                      <button
+                                        className="font-medium rounded-md bg-pink-600 text-white h-6 w-6 leading-normal flex items-center justify-center"
+                                        onClick={() => decreaseItem(item)}
+                                      >
+                                        <AiOutlineMinus />
+                                      </button>
+                                      <p>{item?.quantity}</p>
+                                      <button
+                                        className="font-medium rounded-md bg-pink-600 text-white h-6 w-6 leading-normal flex items-center justify-center"
+                                        onClick={() => increaseItem(item)}
+                                      >
+                                        <AiOutlinePlus />
+                                      </button>
+                                    </div>
 
                                     <div className="flex">
                                       <button
                                         type="button"
                                         className="font-medium text-pink-600 hover:text-pink-500"
+                                        onClick={() => handleRemoveItem(item)}
                                       >
                                         Remove
                                       </button>
@@ -146,18 +164,18 @@ export default function SideCart({ open, setOpen }: CartProps) {
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Subtotal</p>
-                        <p>$262.00</p>
+                        <p>Rs. {subtotal}</p>
                       </div>
                       <p className="mt-0.5 text-sm text-gray-500">
                         Shipping and taxes calculated at checkout.
                       </p>
                       <div className="mt-6">
-                        <a
-                          href="#"
+                        <Link
+                          to="/checkout"
                           className="flex items-center justify-center rounded-md border border-transparent bg-pink-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-pink-700"
                         >
                           Checkout
-                        </a>
+                        </Link>
                       </div>
                       <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                         <p>

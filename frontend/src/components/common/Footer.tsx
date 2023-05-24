@@ -69,7 +69,7 @@ const navigation = {
 
 export default function Example() {
   return (
-    <footer className="bg-pink-50">
+    <footer className="bg-pink-50 relative z-50">
       <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
         <nav className="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12">
           <img className="w-auto h-11 mb-6" src={logo} alt="" />

@@ -1,6 +1,8 @@
-import { Restaurant } from './../interfaces';
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable no-useless-catch */
+import { Restaurant } from "./../interfaces";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
 interface RestaurantState {
   restaurantsData: Restaurant[];
@@ -23,10 +25,10 @@ const initialState: RestaurantState = {
 };
 
 export const fetchRestaurants = createAsyncThunk<Restaurant[], void, {}>(
-  'restaurants/fetchRestaurants',
+  "restaurants/fetchRestaurants",
   async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/restaurants');
+      const response = await axios.get("http://localhost:5000/api/restaurants");
       return response.data;
     } catch (error) {
       throw error;
@@ -35,13 +37,12 @@ export const fetchRestaurants = createAsyncThunk<Restaurant[], void, {}>(
 );
 
 export const fetchRestaurant = createAsyncThunk<Restaurant, void, {}>(
-  'restaurants/fetchRestaurant',
+  "restaurants/fetchRestaurant",
   async (id: any) => {
     try {
       const response = await axios.get(
         `http://localhost:5000/api/restaurants/${id}`
       );
-      console.log('api', response.data);
       return response.data;
     } catch (error) {
       throw error;
@@ -50,7 +51,7 @@ export const fetchRestaurant = createAsyncThunk<Restaurant, void, {}>(
 );
 
 const restaurantSlice = createSlice({
-  name: 'restaurants',
+  name: "restaurants",
   initialState,
   reducers: {
     restaurantsReset: (state) => {

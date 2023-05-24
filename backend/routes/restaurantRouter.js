@@ -9,9 +9,11 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
   const restaurant = restaurants.find((x) => x.id === Number(req.params.id));
   if (restaurant) {
-    const menu = foodItems.filter(
-      (item) => item.restaurantId === Number(req.params.id)
-    );
+    const menu = foodItems
+      .filter((item) => item.restaurantId === Number(req.params.id))
+      .map((item) => {
+        return { ...item, restaurant: restaurant.name };
+      });
     res.json({ ...restaurant, menuItems: menu });
   } else {
     res.status(404);

@@ -1,59 +1,31 @@
 import { useState, ChangeEvent } from "react";
+import { useSelector } from "react-redux";
 import { Dialog, Disclosure } from "@headlessui/react";
 import SideCart from "./SideCart";
 import {
-  ArrowPathIcon,
   Bars3Icon,
   ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import {
-  ChevronDownIcon,
-  PhoneIcon,
-  PlayCircleIcon,
-} from "@heroicons/react/20/solid";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import logo from "../../assets/logo.png";
 import { Link } from "react-router-dom";
 
 const products = [
   {
-    name: "Analytics",
+    name: "My Order",
     description: "Get a better understanding of your traffic",
     href: "#",
     icon: ChartPieIcon,
   },
   {
-    name: "Engagement",
-    description: "Speak directly to your customers",
+    name: "Manage Address",
+    description: "Get a better understanding of your traffic",
     href: "#",
-    icon: CursorArrowRaysIcon,
-  },
-  {
-    name: "Security",
-    description: "Your customers’ data will be safe and secure",
-    href: "#",
-    icon: FingerPrintIcon,
-  },
-  {
-    name: "Integrations",
-    description: "Connect with third-party tools",
-    href: "#",
-    icon: SquaresPlusIcon,
-  },
-  {
-    name: "Automations",
-    description: "Build strategic funnels that will convert",
-    href: "#",
-    icon: ArrowPathIcon,
+    icon: ChartPieIcon,
   },
 ];
-const callsToAction = [
-  { name: "Watch demo", href: "#", icon: PlayCircleIcon },
-  { name: "Contact sales", href: "#", icon: PhoneIcon },
-];
+
 const company = [
   { name: "About us", href: "#" },
   { name: "Careers", href: "#" },
@@ -69,10 +41,14 @@ function classNames(...classes: string[]) {
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [sideCart, setSideCart] = useState<boolean>(false);
-
+  const { cartItems } = useSelector((state: any) => state.cart);
+  const totalItems = cartItems.reduce(
+    (total: number, item: any) => total + item.quantity,
+    0
+  );
   return (
     <>
-      <header className="bg-white">
+      <header className="bg-white relative z-50">
         <nav
           className="mx-auto flex items-center justify-between p-6 lg:px-8"
           aria-label="Global"
@@ -84,6 +60,28 @@ export default function Header() {
             </Link>
           </div>
           <div className="flex lg:hidden">
+            <li className="mr-4 relative inline-block">
+              <button className="" onClick={() => setSideCart(true)}>
+                <div className="absolute -top-1 right-0 z-10 text-white bg-pink-400 text-xs font-bold px-1 py-0.5 rounded-sm">
+                  {totalItems}
+                </div>
+                <svg
+                  className="h-9 lg:h-10 p-2 text-gray-500 svg-inline--fa fa-shopping-cart fa-w-18 fa-9x"
+                  aria-hidden="true"
+                  focusable="false"
+                  data-prefix="far"
+                  data-icon="shopping-cart"
+                  role="img"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 576 512"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M551.991 64H144.28l-8.726-44.608C133.35 8.128 123.478 0 112 0H12C5.373 0 0 5.373 0 12v24c0 6.627 5.373 12 12 12h80.24l69.594 355.701C150.796 415.201 144 430.802 144 448c0 35.346 28.654 64 64 64s64-28.654 64-64a63.681 63.681 0 0 0-8.583-32h145.167a63.681 63.681 0 0 0-8.583 32c0 35.346 28.654 64 64 64 35.346 0 64-28.654 64-64 0-18.136-7.556-34.496-19.676-46.142l1.035-4.757c3.254-14.96-8.142-29.101-23.452-29.101H203.76l-9.39-48h312.405c11.29 0 21.054-7.869 23.452-18.902l45.216-208C578.695 78.139 567.299 64 551.991 64zM208 472c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm256 0c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm23.438-200H184.98l-31.31-160h368.548l-34.78 160z"
+                  ></path>
+                </svg>
+              </button>
+            </li>
             <button
               type="button"
               className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
@@ -115,11 +113,11 @@ export default function Header() {
                     </svg>
                   </a>
                 </li>
-                <li className="ml-2 lg:ml-4 relative inline-block">
+                {/* <li className="ml-2 lg:ml-4 relative inline-block">
                   <a className="" href="">
-                    {/* <div className="absolute -top-1 right-0 z-10 text-white bg-pink-400 text-xs font-bold px-1 py-0.5 rounded-sm">
+                    <div className="absolute -top-1 right-0 z-10 text-white bg-pink-400 text-xs font-bold px-1 py-0.5 rounded-sm">
                       3
-                    </div> */}
+                    </div>
                     <svg
                       className="h-9 lg:h-10 p-2 text-gray-500 svg-inline--fa fa-heart fa-w-16 fa-9x"
                       aria-hidden="true"
@@ -136,11 +134,11 @@ export default function Header() {
                       ></path>
                     </svg>
                   </a>
-                </li>
+                </li> */}
                 <li className="ml-2 lg:ml-4 relative inline-block">
                   <button className="" onClick={() => setSideCart(true)}>
                     <div className="absolute -top-1 right-0 z-10 text-white bg-pink-400 text-xs font-bold px-1 py-0.5 rounded-sm">
-                      12
+                      {totalItems}
                     </div>
                     <svg
                       className="h-9 lg:h-10 p-2 text-gray-500 svg-inline--fa fa-shopping-cart fa-w-18 fa-9x"
@@ -192,7 +190,7 @@ export default function Header() {
                     {({ open }) => (
                       <>
                         <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 hover:bg-gray-50">
-                          Product
+                          My Account
                           <ChevronDownIcon
                             className={classNames(
                               open ? "rotate-180" : "",
@@ -202,7 +200,7 @@ export default function Header() {
                           />
                         </Disclosure.Button>
                         <Disclosure.Panel className="mt-2 space-y-2">
-                          {[...products, ...callsToAction].map((item) => (
+                          {[...products].map((item) => (
                             <Disclosure.Button
                               key={item.name}
                               as="a"
@@ -221,43 +219,14 @@ export default function Header() {
                     href="#"
                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
-                    Features
+                    About us
                   </a>
                   <a
                     href="#"
                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
-                    Marketplace
+                    Contact
                   </a>
-
-                  <Disclosure as="div" className="-mx-3">
-                    {({ open }) => (
-                      <>
-                        <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 hover:bg-gray-50">
-                          Company
-                          <ChevronDownIcon
-                            className={classNames(
-                              open ? "rotate-180" : "",
-                              "h-5 w-5 flex-none"
-                            )}
-                            aria-hidden="true"
-                          />
-                        </Disclosure.Button>
-                        <Disclosure.Panel className="mt-2 space-y-2">
-                          {company.map((item) => (
-                            <Disclosure.Button
-                              key={item.name}
-                              as="a"
-                              href={item.href}
-                              className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                            >
-                              {item.name}
-                            </Disclosure.Button>
-                          ))}
-                        </Disclosure.Panel>
-                      </>
-                    )}
-                  </Disclosure>
                 </div>
                 <div className="py-6">
                   <a

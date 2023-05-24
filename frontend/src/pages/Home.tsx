@@ -1,15 +1,16 @@
-import { useState, ChangeEvent, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchRestaurants } from '../reducers/restaurantSlice';
-import Header from '../components/common/Header';
-import Hero from '../components/common/Hero';
-import Loader from '../components/common/Loader';
-import CardList from '../components/common/CardList';
-import Footer from '../components/common/Footer';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { useState, ChangeEvent, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchRestaurants } from "../reducers/restaurantSlice";
+import Header from "../components/common/Header";
+import Hero from "../components/common/Hero";
+import Loader from "../components/common/Loader";
+import CardList from "../components/common/CardList";
+import Footer from "../components/common/Footer";
 
 function Home() {
   const dispatch = useDispatch();
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const { restaurantsData, restaurantsLoading, restaurantsError } = useSelector(
     (state: any) => state.restaurant
   );
@@ -47,12 +48,12 @@ function Home() {
           </button>
         </div>
       </div> */}
-      <div className='container mx-auto py-16'>
-        <h3 className='text-4xl font-extralight mx-3 mb-5'>
+      <div className="container mx-auto py-16">
+        <h3 className="text-4xl font-extralight mx-3 mb-5">
           Saaray restaurants
         </h3>
         {restaurantsLoading ? (
-          <div className='text-center'>
+          <div className="text-center">
             <Loader />
           </div>
         ) : restaurantsError ? (

@@ -26,13 +26,8 @@ export interface FoodCardProps {
   menuItems: FoodItem[];
 }
 
-export interface Product {
-  id: number;
-  name: string;
-}
-
 export interface CartItem {
-  product: Product;
+  product: FoodItem;
   quantity: number;
 }
 
